@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>tetris</title>
+</head>
+
+<body>
+    <div class="gray-screen"></div>
+
+    <div class="game-container">
+
+        <div class="grid"></div>
+
+        <div class="mini-grid-container">
+            <h3 class="title-text">Score: <span id="score">0</span></h3>
+            <button class="btn" id="btn-start">Start / Pause</button>
+            <div class="mini-grid"></div>
+        </div>
+
+    </div>
+
+    <!-- TODO proper styles -->
+    <div class="description">
+        <p>Press <pre id="mono">space</pre> for pause</p>
+    </div>
+
+    <div class="pause-menu-pop-up">
+        <button class="btn">Start</button>
+        <button class="btn">Continue</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
