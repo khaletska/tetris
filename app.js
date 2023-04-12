@@ -1,10 +1,18 @@
 const grid = document.querySelector('.grid')
 const scoreDisplay = document.querySelector('#score')
+const timerDisplay = document.querySelector('#timer')
 const startBtn = document.querySelector('#btn-start')
 const width = 10
 let nextRandom = 0
-let timerId
-let pressTimer
+// timers
+let startTime // time when the game started
+let pauseTime // time when the pause started
+let gameTimer // timer to move the tetrominoes
+let timerUpdate // timer to tick the clock
+let isPaused = false
+let elapsedTime = 0
+
+let pressTimer // to check how long is the button pressed
 let score = 0
 const colors = [
     '#F6E194', // lTetromino
@@ -51,9 +59,9 @@ const zTetromino = [
 ]
 
 const zTetrominoMirr = [
-    [0, 1, width+1, width + 2],
+    [0, 1, width + 1, width + 2],
     [1, width, width + 1, width * 2],
-    [0, 1, width+1, width + 2],
+    [0, 1, width + 1, width + 2],
     [1, width, width + 1, width * 2]
 ]
 
@@ -79,7 +87,6 @@ const iTetromino = [
 ]
 
 const tetrominoes = [lTetromino, lTetrominoMirr, zTetromino, zTetrominoMirr, tTetromino, oTetromino, iTetromino]
-// #endregion tetrominoes
 
 let currentPosition = 4
 let currentRotation = 0
@@ -96,8 +103,6 @@ function draw() {
     })
 }
 
-// draw()
-
 // undraw the tetromino
 function undraw() {
     current.forEach(index => {
@@ -106,27 +111,30 @@ function undraw() {
     })
 }
 
-// make the tetromino move down
-// timerId = setInterval(moveDown, 1000)
+// #endregion tetrominoes
 
 // assign functions to keyCodes
 function control(e) {
-    if (e.keyCode === 37) {
-        pressTimer = window.setTimeout(function() {
-            moveLeft()
-        }, 10);
-    } else if (e.keyCode === 38) {
-        rotate()
-    } else if (e.keyCode === 39) {
-        pressTimer = window.setTimeout(function() {
-            moveRight()
-        }, 10);
-    } else if (e.keyCode === 40) {
-        pressTimer = window.setTimeout(function() {
-            moveDown()
-        }, 10);
-    } else if (e.keyCode === 32) {
-        btnStartPause()
+    if (!isPaused) {
+        if (e.keyCode === 37) { // arrow left
+            pressTimer = window.setTimeout(function () {
+                moveLeft()
+            }, 10);
+        } else if (e.keyCode === 38) { // arrow up
+            rotate()
+        } else if (e.keyCode === 39) { // arrow right
+            pressTimer = window.setTimeout(function () {
+                moveRight()
+            }, 10);
+        } else if (e.keyCode === 40) { // arrow down
+            pressTimer = window.setTimeout(function () {
+                moveDown()
+            }, 10);
+        }
+    } 
+
+    if (e.keyCode === 32) { // space
+        btnPause()
     }
 }
 
@@ -155,6 +163,7 @@ function freeze() {
         displayShape()
         addScore()
         gameOver()
+        // requestAnimationFrame(freeze)
     }
 }
 
@@ -244,7 +253,7 @@ const upNextTetrominoes = [
     [0, displayWidth, displayWidth * 2, 1], // lTetromino
     [0, 1, displayWidth + 1, displayWidth * 2 + 1], // lTetrominoMirr
     [1, 2, displayWidth, displayWidth + 1], // zTetromino
-    [0, 1, displayWidth+1, displayWidth + 2], // zTetrominoMirr
+    [0, 1, displayWidth + 1, displayWidth + 2], // zTetrominoMirr
     [1, displayWidth, displayWidth + 1, displayWidth + 2], // tTetromino
     [0, 1, displayWidth, displayWidth + 1], // oTetromino
     [0, displayWidth, displayWidth * 2, displayWidth * 3] // iTetromino
@@ -264,23 +273,62 @@ function displayShape() {
     })
 }
 
+function updateTimer() {
+    let currentTime = new Date().getTime()
+
+    elapsedTime = currentTime - startTime
+
+    // calculate hours, minutes, and seconds
+    let hours = Math.floor(elapsedTime / 3600000)
+    let minutes = Math.floor((elapsedTime % 3600000) / 60000)
+    let seconds = Math.floor((elapsedTime % 60000) / 1000)
+
+    // format output with leading zeros
+    let timeString = hours.toString().padStart(2, "0") + ":" +
+        minutes.toString().padStart(2, "0") + ":" +
+        seconds.toString().padStart(2, "0")
+
+    timerDisplay.innerHTML = timeString
+}
+
 // #endregion mini-grid
 
 // add functionality to a button
-// TODO nextRandom should stay the same if game on pause and refresh if it is the very first start
-function btnStartPause() {
-    if (timerId) {
-        clearInterval(timerId)
-        timerId = null
-    } else {
+function btnPause() {
+    if (isPaused) { // resume the game
+        let pauseDuration = new Date().getTime() - pauseTime
+        startTime += pauseDuration
+        isPaused = false
+
+        gameTimer = setInterval(moveDown, 1000)
+        timerUpdate = setInterval(updateTimer, 1000)
         draw()
-        timerId = setInterval(moveDown, 1000)
-        nextRandom = Math.floor(Math.random() * tetrominoes.length)
-        displayShape()
+    } else if (!isPaused && gameTimer) { // pause the game
+        pauseTime = new Date().getTime()
+        isPaused = true
+
+        clearInterval(gameTimer)
+        gameTimer = null
+        clearInterval(timerUpdate)
+        timerUpdate = null
+    } else { // start over
+        btnStart()
     }
 }
 
-startBtn.addEventListener('click', btnStartPause)
+function btnStart() {
+    startTime = new Date().getTime()
+    isPaused = false
+    elapsedTime = 0
+
+    gameTimer = setInterval(moveDown, 1000)
+    timerUpdate = setInterval(updateTimer, 1000)
+    nextRandom = Math.floor(Math.random() * tetrominoes.length)
+    displayShape()
+    draw()
+}
+
+startBtn.addEventListener('click', btnPause)
 
 // add score
 function addScore() {
@@ -291,6 +339,7 @@ function addScore() {
         //     row.push(i+j)
         // }
         if (row.every(index => squares[index].classList.contains('taken'))) {
+            undraw()
             score += 10
             scoreDisplay.innerHTML = score
             row.forEach(index => {
@@ -301,6 +350,7 @@ function addScore() {
             const squaresRemoved = squares.splice(i, width)
             squares = squaresRemoved.concat(squares)
             squares.forEach(cell => grid.appendChild(cell))
+            draw()
         }
     }
 }
@@ -309,7 +359,10 @@ function addScore() {
 function gameOver() {
     if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
         scoreDisplay.innerHTML = 'end'
-        clearInterval(timerId)
+        clearInterval(gameTimer)
+        gameTimer = null
+        clearInterval(timerUpdate)
+        timerUpdate = null
     }
 }
 

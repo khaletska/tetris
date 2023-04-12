@@ -92,8 +92,9 @@ body {
     text-transform: uppercase;
     font-size: var(--main-text-font-size);
     letter-spacing: -0.075em;
-
     text-align: center;
+
+    margin-top: 50px;
 }
 
 /* main grid */
@@ -144,6 +145,11 @@ body {
 
 #btn-start {
     margin: 20px 0 50px;
+}
+
+#timer {
+    margin-top: 10px;
+    font-size: var(--main-text-font-size);
 }
 
 /* pause-menu-pop-up */
