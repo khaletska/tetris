@@ -6,6 +6,8 @@
 
 ## General Information
  Basic tetris game written in JavaScript.
+ 
+ Link for gh-pages [here](https://khaletska.github.io/tetris/).
 
 ## Technologies
 - ### [HTML](https://www.w3.org/html/)
