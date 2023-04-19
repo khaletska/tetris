@@ -10,16 +10,23 @@
 </head>
 
 <body>
-    <div class="gray-screen"></div>
+    <div id="gray-screen" class="gray-screen"></div>
 
     <div class="game-container">
 
         <div class="grid"></div>
 
         <div class="mini-grid-container">
+            <div id="lives">
+                <img class="life" alt="life" src="img/life.svg">
+                <img class="life" alt="life" src="img/life.svg">
+                <img class="life" alt="life" src="img/life.svg">
+            </div>
+            <p class="title-text">FPS:<span id="fps"></span></p>
             <h3 class="title-text">Score: <span id="score">0</span></h3>
+            <p class="title-text">Level: <span id="level">1</span></p>
             <p class="title-text" id="timer">00:00:00</p>
-            <button class="btn" id="btn-start">Start / Pause</button>
+            <!-- <button class="btn" id="btn-start">Start / Pause</button> -->
             <div class="mini-grid"></div>
             
             <!-- TODO proper styles -->
@@ -31,11 +38,21 @@
     </div>
 
 
-    <div class="pause-menu-pop-up">
-        <button class="btn">Start</button>
-        <button class="btn">Continue</button>
+    <div id="pause-menu" class="pop-up">
+        <p>game on pause</p>
+        <button id="start-btn-pop-up" class="btn">start</button>
+        <button id="resume-btn-pop-up" class="btn">continue</button>
     </div>
 
+    <div id="new-level-menu" class="pop-up">
+        <p>new level</p>
+        <!-- <button id="start-btn-pop-up" class="btn">start</button> -->
+    </div>
+
+    <div id="game-over-menu" class="pop-up">
+        <p>game over</p>
+        <button id="start-btn-pop-up" class="btn">restart</button>
+    </div>
     <script src="app.js"></script>
 </body>
 

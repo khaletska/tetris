@@ -7,15 +7,25 @@
 }
 
 :root {
-    --bg: #F0F3E3;
-    --grid-bg: #FAF8EC;
-    --lTetromino: #F6E194;
-    --lTetrominoMirr: #e4f694;
-    --zTetromino: #F69F83;
-    --zTetrominoMirr: #f683a9;
-    --tTetromino: #EEAFBA;
-    --oTetromino: #D3DFAF;
-    --iTetromino: #AFE2E9;
+    --bg: #F6EDC4;
+    --grid-bg: #FBF4D4;
+    /* --bg: #EFDB95; */
+    /* --grid-bg: #F6EBC4; */
+    --text: #582e2b;
+    --lTetromino: #8CC286;
+    --lTetrominoMirr: #FBD44D;
+    --zTetromino: #EB782D;
+    --zTetrominoMirr: #ECB040;
+    --tTetromino: #D2CB48;
+    --oTetromino: #91DCD7;
+    --iTetromino: #4BA3B1;
+    /* --lTetromino: #BE7C4D;
+    --lTetrominoMirr: #8F694F;
+    --zTetromino: #7C4219;
+    --zTetrominoMirr: #DFA47B;
+    --tTetromino: #DFB496;
+    --oTetromino: #B3612B;
+    --iTetromino: #86683A; */
 
     --title-text: 'Lato';
     --main-text: 'Nunito';
@@ -42,10 +52,10 @@ body {
     left: 0;
     height: 100%;
     width: 100%;
-    background-color: black;
+    background-color: #181B0D;
     z-index: 1000;
     opacity: 0.5;
-    display: none;
+    
 }
 
 .game-container {
@@ -63,28 +73,31 @@ body {
     padding-top: 5px;
     padding-bottom: 5px;
     margin-right: 10px;
-
-    background-color: var(--iTetromino);
+ 
+    /* TODO hover E6825F */
+    background-color: var(--grid-bg);
 
     font-family: var(--main-text);
     text-transform: uppercase;
     font-size: var(--main-text-font-size);
     letter-spacing: -0.075em;
+    color: var(--text);
 
     text-decoration: none;
 }
-
+/* 
 .btn:active {
     border: none;
 }
 
 .btn:hover {
     background-color: #a2d2d8;
-}
+} */
 
 .title-text {
     font-family: var(--title-text);
     text-transform: uppercase;
+    color: var(--text);
 }
 
 .description {
@@ -93,6 +106,7 @@ body {
     font-size: var(--main-text-font-size);
     letter-spacing: -0.075em;
     text-align: center;
+    color: var(--text);
 
     margin-top: 50px;
 }
@@ -115,7 +129,7 @@ body {
 }
 
 .tetromino {
-    box-shadow: inset 0 0 0 2px #EBEBE4;
+    box-shadow: inset 0 0 0 2px var(--grid-bg);
     /* background-color: cadetblue; */
 }
 
@@ -129,6 +143,7 @@ body {
 }
 
 .mini-grid {
+    margin: 20px 0;
     width: 180px;
     height: 180px;
     display: flex;
@@ -150,13 +165,17 @@ body {
 #timer {
     margin-top: 10px;
     font-size: var(--main-text-font-size);
+    color: var(--text);
 }
 
 /* pause-menu-pop-up */
 
-.pause-menu-pop-up {
+.pop-up {
     display: flex;
+    flex-direction: column;
     justify-content: space-evenly;
+    align-items: center;
+    gap: 10px;
 
     position: absolute;
     top: 50%;
@@ -165,14 +184,25 @@ body {
 
     width: 400px;
     height: auto;
-    background-color: var(--iTetromino);
+    background-color: var(--bg);
     font-family: var(--main-text);
     text-transform: uppercase;
     font-size: var(--main-text-font-size);
     padding: 20px;
+    color: var(--text);
 
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 50px;
     z-index: 1001;
-    display: none;
+}
+
+/* #region lives */
+.life {
+    height: 25px;
+    width: 25px;
+}
+
+#lives {   
+    /* TODO */
+    margin-bottom: 50px;
 }
