@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="app/static/style.css" />
+  <link rel="stylesheet" href="app/static/blink.css" />
+  <title>tetris</title>
+  <link rel="icon" href="/app/img/tetris-icon.png" type="image/x-icon" />
+</head>
+
+<body>
+  <div id="gray-screen" class="gray-screen"></div>
+
+  <div class="game-container">
+    <div id="leaders-list">
+      <p class="title-text">leaders:</p>
+      <div id="leaders-board">Some user -- 200 points</div>
+      <button id="open-players-board-btn" class="btn">View all players</button>
+      <p id="rules-title" class="title-text">rules:</p>
+      <div id="rules">
+        <div class="rule"><img src="/app/img/esc.svg" /> - pause</div>
+        <div class="rule"><img src="/app/img/left-arrow.svg" /> - move left</div>
+        <div class="rule"><img src="/app/img/right-arrow.svg" /> - move right</div>
+        <div class="rule"><img src="/app/img/down-arrow.svg" /> - move down</div>
+        <div class="rule"><img src="/app/img/up-arrow.svg" /> - rotate</div>
+        <div class="rule"><img src="/app/img/space.svg" /> - fast drop</div>
+      </div>
+    </div>
+
+    <div class="grid"></div>
+
+    <div class="mini-grid-container">
+      <div id="lives">
+        <img class="life" alt="life" src="app/img/life.svg" />
+        <img class="life" alt="life" src="app/img/life.svg" />
+        <img class="life" alt="life" src="app/img/life.svg" />
+      </div>
+      <p class="title-text">FPS:<span id="fps">1</span></p>
+      <h3 class="title-text">Score: <span id="score">0</span></h3>
+      <div id="progress">
+        <p id="progress-level" class="title-text">Level: <span id="level">1</span></p>
+        <p id="progress-speed" class="title-text">Speed: <span id="speedScreen">1</span></p>
+      </div>
+      <p class="title-text" id="timer">00:00:00</p>
+      <div class="mini-grid"></div>
+      <footer>
+        <p class="main-text">made by</p>
+        <p class="main-text">
+          <a href="https://01.kood.tech/git/ekhalets">Elena</a>,
+          <a href="https://01.kood.tech/git/Olya">Olya</a>,
+          <a href="https://01.kood.tech/git/TaivoT">Taivo</a> and
+          <a href="https://01.kood.tech/git/govchare">Glib</a>
+        </p>
+        <p class="main-text">kood/Johvi, 2023</p>
+      </footer>
+    </div>
+  </div>
+
+  <div id="mode-screen" class="pop-up">
+    <p class="title-text">select game mode</p>
+    <div id="modes">
+      <div class="mode">
+        <img src="https://cdn.discordapp.com/attachments/1075493710692876330/1103643694420213801/mode1.jpg" />
+        <button id="basic-mode-btn" class="btn modes-btn">infinity</button>
+      </div>
+      <div class="mode">
+        <img src="https://cdn.discordapp.com/attachments/1075493710692876330/1103643694692847757/mode2.jpg" />
+        <button id="story-mode-btn" class="btn modes-btn">story</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="story-main-introduction" class="pop-up">
+    <p class="title-text">welcome to tetris!</p>
+    <p class="main-text">
+      In a distant future, humanity had spread out among the stars, colonizing new planets and exploring the unknown
+      reaches of the galaxy. But with great progress came great danger, as the explorers encountered all kinds of
+      strange creatures and beings, some of which were hostile and dangerous.
+      <br /><br />
+      You are one of the brave adventurers, a space traveler equipped with the latest technology and weaponry, ready to
+      face any challenge that the universe can throw at you. Your mission is to travel from planet to planet, battling
+      monsters that threaten the safety of the local inhabitants and
+      the entire galaxy.
+    </p>
+    <button id="story-main-introduction-btn" class="btn">let's go!</button>
+  </div>
+
+  <div id="pause-menu" class="pop-up">
+    <p id="pause-menu-text" class="title-text">game paused</p>
+    <button id="pause-menu-restart-btn" class="btn">restart</button>
+    <button id="pause-menu-resume-btn" class="btn">continue</button>
+  </div>
+
+  <div id="new-level-pop-up" class="pop-up">
+    <p class="title-text">level <span id="level-number">1</span></p>
+    <p id="new-level-text" class="main-text">
+      The first monster you encounter is the Shadow Beast, a dark and elusive creature that can move quickly and
+      silently, striking from the shadows. It has been terrorizing a peaceful planet, stealing their valuable resources
+      and capturing their people. You must use your weapons and quick
+      reflexes to hunt down the Shadow Beast and defeat it before it can escape.
+    </p>
+    <button id="new-level-btn" class="btn">start</button>
+  </div>
+
+  <div id="game-over-menu" class="pop-up">
+    <p class="title-text">game over</p>
+    <p class="main-text">
+      Though the monsters proved too powerful for you to defeat this time, do not despair, dear hero. Remember that
+      failure is not the end, but merely a setback on the road to success. You have shown incredible bravery and
+      determination, and your efforts have not gone unnoticed.
+      <br /><br />
+      Perhaps it is time for you to hone your skills further. Try training in the infinity mode and when the time comes,
+      gather your courage and take up your weapons once more. You may yet be the one to save the galaxy from the
+      monsters' destructive powers.
+    </p>
+    <button id="game-over-menu-btn" class="btn">restart</button>
+  </div>
+
+  <div id="win-menu" class="pop-up">
+    <p class="title-text">congratulations!</p>
+    <p class="main-text">
+      After an intense battle, you emerge victorious against the last of the monsters. The galaxy is now safe from their
+      destructive powers, and the planets you have saved are now free to prosper and thrive. You return to your home
+      planet as a celebrated hero, greeted with cheers and admiration
+      from the people you have saved. You are hailed as a true champion, and your name will be remembered throughout the
+      ages as the savior of the galaxy.
+    </p>
+    <button id="win-menu-btn" class="btn">restart</button>
+  </div>
+
+  <div id="enter-name-menu" class="pop-up">
+    <p>enter your name:</p>
+    <form id="submitscore">
+      <input id="player-name" name="player-name" type="text" maxlength="10" required />
+      <button class="btn" type="submit">submit</button>
+    </form>
+  </div>
+
+  <div id="players-list" class="pop-up" style="display: none">
+    <p>Players</p>
+    <div class="highscores">
+      <div class="list" id="list"></div>
+      <div class="pagenumbers" id="pagination"></div>
+    </div>
+    <div id="page-btns">
+      <button id="prev-page" class="btn">
+        << /button>
+          <button id="next-page" class="btn">></button>
+    </div>
+    <!-- TODO add buttons < and > and close popup-->
+    <button id="players-list-close-btn" class="btn">close</button>
+  </div>
+
+  <script type="module" src="app/script.js"></script>
+  <script type="module" src="app/game.js"></script>
+  <script src="app/score.js"></script>
+</body>
+
+</html>
