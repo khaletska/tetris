@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"sync"
 
 	db "01.kood.tech/git/ekhalets/tetris/db"
@@ -44,7 +43,7 @@ func main() {
 	app.setuUpDB()
 	defer app.DB.Close()
 	fmt.Println("Visit http://localhost:8080 to play the game!")
-	fileServer := http.FileServer(neuteredFileSystem{http.Dir("./app")})
+	fileServer := http.FileServer(http.Dir("./app")) //neuteredFileSystem{http.Dir("./app")})
 	http.Handle("/app/", http.StripPrefix("/app", fileServer))
 	http.HandleFunc("/", app.tetris)
 	http.HandleFunc("/ws", app.wsEndPoint)
@@ -123,25 +122,25 @@ func checkOrigin(r *http.Request) bool { //helps to fight Cross site request for
 	}
 }
 
-// creates a safe filesystem, disabling browsing through the static folder in the browser
-func (nfs neuteredFileSystem) Open(path string) (http.File, error) {
-	f, err := nfs.fs.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	s, _ := f.Stat()
-	if s.IsDir() {
-		index := filepath.Join(path, "index.html")
-		if _, err := nfs.fs.Open(index); err != nil {
-			closeErr := f.Close()
-			if closeErr != nil {
-				return nil, closeErr
-			}
-			return nil, err
-		}
-	}
-	return f, nil
-}
+// // creates a safe filesystem, disabling browsing through the static folder in the browser
+// func (nfs neuteredFileSystem) Open(path string) (http.File, error) {
+// 	f, err := nfs.fs.Open(path)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	s, _ := f.Stat()
+// 	if s.IsDir() {
+// 		index := filepath.Join(path, "index.html")
+// 		if _, err := nfs.fs.Open(index); err != nil {
+// 			closeErr := f.Close()
+// 			if closeErr != nil {
+// 				return nil, closeErr
+// 			}
+// 			return nil, err
+// 		}
+// 	}
+// 	return f, nil
+// }
 func (app *application) setuUpDB() {
 	database, err := db.OpenDatabase() //connect to db
 	if err != nil {
