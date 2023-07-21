@@ -1,2 +1,5 @@
-go build
-mv tetris ./build
+set -euxo pipefail
+
+mkdir -p "$(pwd)/functions"
+GOBIN=$(pwd)/functions go install ./...
+chmod +x "$(pwd)"/functions/*
