@@ -16,17 +16,13 @@ import (
 )
 
 var (
-	port     = ":8080"
+	port     = ":" + os.Getenv("PORT")
 	upgrader = websocket.Upgrader{ //upgrades the connection to a websocket connection
-		CheckOrigin:     checkOrigin,
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 	}
 )
 
-type neuteredFileSystem struct {
-	fs http.FileSystem
-}
 type application struct {
 	DB       *sql.DB
 	Players  PlayerList
@@ -43,7 +39,7 @@ func main() {
 	app.setuUpDB()
 	defer app.DB.Close()
 	fmt.Println("Visit http://localhost:8080 to play the game!")
-	fileServer := http.FileServer(http.Dir("./app")) //neuteredFileSystem{http.Dir("./app")})
+	fileServer := http.FileServer(http.Dir("./app"))
 	http.Handle("/app/", http.StripPrefix("/app", fileServer))
 	http.HandleFunc("/", app.tetris)
 	http.HandleFunc("/ws", app.wsEndPoint)
@@ -112,35 +108,6 @@ func (app *application) setupEventHandler() { //hear we assign functions to hand
 	app.handlers[EventNewScore] = app.AddNewPlayerScoreHandler
 }
 
-func checkOrigin(r *http.Request) bool { //helps to fight Cross site request forgery
-	origin := r.Header.Get("Origin")
-	switch origin {
-	case "http://localhost" + port:
-		return true
-	default:
-		return false
-	}
-}
-
-// // creates a safe filesystem, disabling browsing through the static folder in the browser
-// func (nfs neuteredFileSystem) Open(path string) (http.File, error) {
-// 	f, err := nfs.fs.Open(path)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	s, _ := f.Stat()
-// 	if s.IsDir() {
-// 		index := filepath.Join(path, "index.html")
-// 		if _, err := nfs.fs.Open(index); err != nil {
-// 			closeErr := f.Close()
-// 			if closeErr != nil {
-// 				return nil, closeErr
-// 			}
-// 			return nil, err
-// 		}
-// 	}
-// 	return f, nil
-// }
 func (app *application) setuUpDB() {
 	database, err := db.OpenDatabase() //connect to db
 	if err != nil {
