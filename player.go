@@ -78,11 +78,9 @@ func (p *Player) WriteMessages() {
 			if err := p.ws.WriteMessage(websocket.TextMessage, data); err != nil {
 				log.Println(err)
 			}
-			log.Println("sent message")
 		case <-ticker.C:
 			//Sends a ping every 10 seconds, to keep the connection alive
 			if err := p.ws.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
-				log.Println("writemsg: ", err)
 				return
 			}
 		}
